@@ -18,12 +18,12 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
 gi.require_version("PangoCairo", "1.0")
 from gi.repository import Gio, GLib, Gtk
-from mint_meter.config import validate
-from mint_meter.metrics import Capacity, Sample
-from mint_meter.network import Rate
-from mint_meter.usage import UsageTotals
-from mint_meter.ui.settings import SettingsDialog
-from mint_meter.ui.widget import MeterWindow
+from tallydesklet.config import validate
+from tallydesklet.metrics import Capacity, Sample
+from tallydesklet.network import Rate
+from tallydesklet.usage import UsageTotals
+from tallydesklet.ui.settings import SettingsDialog
+from tallydesklet.ui.widget import MeterWindow
 
 
 def settle():
@@ -50,7 +50,7 @@ def main():
     # A fixed standard theme avoids exposing the user's desktop appearance.
     Gtk.Settings.get_default().set_property("gtk-theme-name", "Adwaita")
     Gtk.Settings.get_default().set_property("gtk-font-name", "Sans 10")
-    app = Gtk.Application(application_id="org.mintmeter.Examples",
+    app = Gtk.Application(application_id="org.tallydesklet.Examples",
                           flags=Gio.ApplicationFlags.NON_UNIQUE)
     app.register(None)
     app.store = SimpleNamespace(notice=None)

@@ -1,4 +1,4 @@
-# Mint Meter development
+# TallyDesklet development
 
 - Read `docs/BUILD_SPEC.md`; it is the sole copy of the requirements.
 - Use distribution `/usr/bin/python3`, GTK 3, Cairo and psutil. No web frontend.

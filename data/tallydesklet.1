@@ -1,8 +1,8 @@
-.TH MINT-METER 1 "October 2026" "Mint Meter" "User Commands"
+.TH TALLYDESKLET 1 "October 2026" "TallyDesklet" "User Commands"
 .SH NAME
-mint-meter \- compact desktop system monitor
+tallydesklet \- compact desktop system monitor
 .SH SYNOPSIS
-.B mint-meter
+.B tallydesklet
 .RB [ --settings | --reset-position | --quit | --version ]
 .SH DESCRIPTION
 Shows CPU, RAM, filesystem capacity and throughput on one routed network
@@ -27,11 +27,17 @@ Quit the running instance.
 .B --version
 Print the version without opening a display.
 .SH FILES
-.I $XDG_CONFIG_HOME/mint-meter/config.json
-(defaults to ~/.config/mint-meter/config.json).
 .PP
-.I $XDG_STATE_HOME/mint-meter/usage.json
-(defaults to ~/.local/state/mint-meter/usage.json). At most seven daily totals;
+Legacy mint-meter preferences and usage are copied on first launch only if
+the corresponding TallyDesklet file is absent. Original files are preserved.
+The mint-meter command remains available for compatibility. Quit the old app
+before upgrading.
+.PP
+.I $XDG_CONFIG_HOME/tallydesklet/config.json
+(defaults to ~/.config/tallydesklet/config.json).
+.PP
+.I $XDG_STATE_HOME/tallydesklet/usage.json
+(defaults to ~/.local/state/tallydesklet/usage.json). At most seven daily totals;
 checkpointed once per minute and on normal exit.
 .SH NOTES
 Startup at login is opt-in. Package removal retains personal settings and

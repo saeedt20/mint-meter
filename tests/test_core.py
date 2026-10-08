@@ -7,13 +7,13 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from mint_meter import autostart
-from mint_meter.config import ConfigStore, DEFAULTS, validate
-from mint_meter.formatting import capacity, quantity
-from mint_meter.history import GraphScale, History
-from mint_meter.metrics import disk_capacity, memory_capacity
-from mint_meter.network import RateSampler, choose_interface, route_candidates
-from mint_meter.position import place
+from tallydesklet import autostart
+from tallydesklet.config import ConfigStore, DEFAULTS, validate
+from tallydesklet.formatting import capacity, quantity
+from tallydesklet.history import GraphScale, History
+from tallydesklet.metrics import disk_capacity, memory_capacity
+from tallydesklet.network import RateSampler, choose_interface, route_candidates
+from tallydesklet.position import place
 
 
 class CapacityTests(unittest.TestCase):
@@ -150,7 +150,7 @@ class ConfigTests(unittest.TestCase):
 
     def test_roundtrip_atomic_private_and_recovery(self):
         with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / "mint-meter/config.json"
+            path = Path(temp) / "tallydesklet/config.json"
             store = ConfigStore(path)
             self.assertEqual(store.load(), DEFAULTS)
             config = copy.deepcopy(DEFAULTS)
@@ -168,7 +168,7 @@ class ConfigTests(unittest.TestCase):
             store = ConfigStore(Path(temp) / "config.json")
             store.save(DEFAULTS)
             before = store.path.read_bytes()
-            with patch("mint_meter.config.os.replace", side_effect=OSError("test failure")):
+            with patch("tallydesklet.config.os.replace", side_effect=OSError("test failure")):
                 with self.assertRaises(OSError):
                     store.save(DEFAULTS)
             self.assertEqual(store.path.read_bytes(), before)
@@ -190,7 +190,7 @@ class PositionTests(unittest.TestCase):
 class AutostartTests(unittest.TestCase):
     def test_opt_in_roundtrip_and_disabled_state(self):
         with tempfile.TemporaryDirectory() as temp, patch.dict(os.environ, {"XDG_CONFIG_HOME": temp}):
-            executable = Path(temp) / "mint-meter"
+            executable = Path(temp) / "tallydesklet"
             executable.touch()
             self.assertFalse(autostart.enabled())
             autostart.set_enabled(True, executable=executable)

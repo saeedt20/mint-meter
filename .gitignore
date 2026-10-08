@@ -5,6 +5,7 @@ __pycache__/
 *.py[cod]
 /.venv/
 /debian/.debhelper/
+/debian/tallydesklet/
 /debian/mint-meter/
 /debian/debhelper-build-stamp
 /debian/*.substvars

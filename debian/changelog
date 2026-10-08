@@ -1,3 +1,12 @@
+tallydesklet (0.2.1-1) unstable; urgency=medium
+
+  * Rename the application, package, and command to TallyDesklet.
+  * Import existing preferences and usage without changing legacy files.
+  * Preserve the legacy command and explicit login startup choices.
+  * Refresh documentation and privacy-safe example previews.
+
+ -- saeedt20 <132300919+saeedt20@users.noreply.github.com>  Fri, 09 Oct 2026 00:00:00 +0000
+
 mint-meter (0.2.0-1) unstable; urgency=medium
 
   * Add persistent daily and Sunday-based weekly combined network usage.

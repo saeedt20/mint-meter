@@ -64,9 +64,11 @@ def validate(raw):
 def atomic_write(path, text):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp = tempfile.mkstemp(prefix=".mint-meter-", dir=path.parent)
+    fd, tmp = tempfile.mkstemp(prefix=".tallydesklet-", dir=path.parent)
     try:
-        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+        mode = "wb" if isinstance(text, bytes) else "w"
+        options = {} if mode == "wb" else {"encoding": "utf-8"}
+        with os.fdopen(fd, mode, **options) as stream:
             stream.write(text)
             stream.flush()
             os.fsync(stream.fileno())
@@ -76,12 +78,20 @@ def atomic_write(path, text):
             os.unlink(tmp)
 
 
+def import_legacy_file(path, legacy):
+    """Copy old state once; never overwrite new state or modify the original."""
+    if legacy is not None and not path.exists() and legacy.is_file():
+        atomic_write(path, legacy.read_bytes())
+
+
 class ConfigStore:
     def __init__(self, path=None):
-        self.path = Path(path) if path else config_home() / "mint-meter/config.json"
+        self.path = Path(path) if path else config_home() / "tallydesklet/config.json"
+        self.legacy = None if path else config_home() / "mint-meter/config.json"
         self.notice = None
 
     def load(self):
+        import_legacy_file(self.path, self.legacy)
         try:
             raw = json.loads(self.path.read_text())
             if not isinstance(raw, dict) or raw.get("schema_version", 1) != 1:

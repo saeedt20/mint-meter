@@ -3,17 +3,17 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mint-meter"
+name = "tallydesklet"
 dynamic = ["version"]
 description = "A compact GTK desktop system monitor for Linux"
 requires-python = ">=3.10"
 dependencies = ["psutil>=5.9"]
 
 [project.scripts]
-mint-meter = "mint_meter.app:main"
+tallydesklet = "tallydesklet.app:main"
 
 [tool.setuptools.dynamic]
-version = {attr = "mint_meter.__version__"}
+version = {attr = "tallydesklet.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]

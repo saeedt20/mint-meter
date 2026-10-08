@@ -1,4 +1,4 @@
-# Mint Meter — Complete Build Brief for Claude Code or Codex
+# TallyDesklet — Complete Build Brief for Claude Code or Codex
 
 ## 1. Your task
 
@@ -6,7 +6,12 @@ Act as the developer of this project. Build, test, document, and package a worki
 
 Read this entire document before implementing. Inspect the actual development environment and any existing repository instructions. Make reasonable implementation decisions, record them briefly, and proceed through the work. Do not stop at a plan, static mockup, or partial scaffold. Ask questions only when a missing decision genuinely blocks progress. Do not claim that a test, installation, or desktop behavior was verified unless it actually was.
 
-The app's working name is **Mint Meter**, package and command `mint-meter`, initial version `0.1.0`. This name is a suggested default, not an official Linux Mint product name. Use original artwork and no Apple branding.
+The owner-selected name is **TallyDesklet**, package and command `tallydesklet`, current version `0.2.1`. The earlier name was Mint Meter. Use original artwork and no Apple branding.
+
+On first launch, import legacy `mint-meter` preferences and usage only when the
+new `tallydesklet` file is absent, preserving the original files. Keep the
+`mint-meter` command as a compatibility launcher. Preserve existing opt-in
+autostart; installation must never enable it.
 
 ## 2. Product purpose and design
 
@@ -45,10 +50,10 @@ The wallpaper and Xfce panel in the mockup provide context only. Do not change t
    selected network interface, without summing overlapping interfaces.
 3. Daily totals reset at local midnight; calendar-week totals reset at **Sunday
    local midnight**. Initial periods contain only traffic observed since tracking began.
-4. Count while Mint Meter runs; preserve totals across normal quit/restart,
+4. Count while TallyDesklet runs; preserve totals across normal quit/restart,
    but do not include traffic while closed or imply full-system/billing accounting.
 5. Persist at most seven daily aggregate buckets atomically under
-   `$XDG_STATE_HOME/mint-meter/usage.json` (default `~/.local/state/mint-meter/usage.json`).
+   `$XDG_STATE_HOME/tallydesklet/usage.json` (default `~/.local/state/tallydesklet/usage.json`).
    Checkpoint at most once per minute and flush changed totals on normal shutdown.
 6. Establish a fresh baseline on app launch, interface switch, unavailable
    counters, counter reset, nonpositive elapsed time, or sampling gaps over 15
@@ -185,14 +190,14 @@ API details and available fields must be verified against the installed psutil v
 - Always-on-top and keep-below must not be set simultaneously.
 - Preserve monitor preference and position; clamp to an available work area if a monitor disappears or the resolution changes. Support negative monitor coordinates.
 - Launching the app twice must reuse the existing instance. A second launch may open settings so a misplaced or hidden widget remains recoverable.
-- Provide commands `mint-meter`, `mint-meter --settings`, `mint-meter --reset-position`, `mint-meter --quit`, and `mint-meter --version`.
+- Provide commands `tallydesklet`, `tallydesklet --settings`, `tallydesklet --reset-position`, `tallydesklet --quit`, and `tallydesklet --version`.
 - Provide keyboard access to settings controls and accessible names for icon-only buttons. Support Escape to close settings.
 
 Treat X11 window hints as requests, not guarantees. Select the GTK/GDK window type and stacking strategy by testing with Xfce's window manager and desktop. In particular, verify that clicking the desktop and using Show Desktop do not permanently bury or lose the widget. Avoid an override-redirect shortcut that breaks input or reliable window management. Do not use a dock reservation to simulate a desktop widget.
 
 ## 8. Settings and persistence
 
-Use `$XDG_CONFIG_HOME/mint-meter/config.json`, falling back to `~/.config/mint-meter/config.json`. Store optional bounded logs under the XDG state directory. No writes into the installed application directory.
+Use `$XDG_CONFIG_HOME/tallydesklet/config.json`, falling back to `~/.config/tallydesklet/config.json`. Store optional bounded logs under the XDG state directory. No writes into the installed application directory.
 
 Suggested schema, adjustable to the implementation:
 
@@ -239,20 +244,20 @@ Use the following paths as a guide; keep modules small and avoid unnecessary abs
 | --- | --- |
 | `README.md` | Features, screenshot, supported target, install/run/uninstall instructions |
 | `pyproject.toml` | Project metadata and test/lint configuration |
-| `src/mint_meter/__init__.py` | Package metadata |
-| `src/mint_meter/__main__.py` | Module entry point |
-| `src/mint_meter/app.py` | Application lifecycle, CLI, single instance |
-| `src/mint_meter/metrics.py` | CPU, memory, filesystem collection |
-| `src/mint_meter/network.py` | Interface selection, counters, rate calculation |
-| `src/mint_meter/history.py` | Timestamped bounded series |
-| `src/mint_meter/formatting.py` | Units and compact labels |
-| `src/mint_meter/config.py` | Validation, persistence, migrations |
-| `src/mint_meter/autostart.py` | User startup entry management |
-| `src/mint_meter/ui/widget.py` | Main card and desktop behavior |
-| `src/mint_meter/ui/graphs.py` | Cairo graphs and bars |
-| `src/mint_meter/ui/settings.py` | Preferences dialog |
-| `src/mint_meter/ui/theme.py` | Design tokens, light/dark styling |
-| `data/mint-meter.desktop` | Application-menu launcher |
+| `src/tallydesklet/__init__.py` | Package metadata |
+| `src/tallydesklet/__main__.py` | Module entry point |
+| `src/tallydesklet/app.py` | Application lifecycle, CLI, single instance |
+| `src/tallydesklet/metrics.py` | CPU, memory, filesystem collection |
+| `src/tallydesklet/network.py` | Interface selection, counters, rate calculation |
+| `src/tallydesklet/history.py` | Timestamped bounded series |
+| `src/tallydesklet/formatting.py` | Units and compact labels |
+| `src/tallydesklet/config.py` | Validation, persistence, migrations |
+| `src/tallydesklet/autostart.py` | User startup entry management |
+| `src/tallydesklet/ui/widget.py` | Main card and desktop behavior |
+| `src/tallydesklet/ui/graphs.py` | Cairo graphs and bars |
+| `src/tallydesklet/ui/settings.py` | Preferences dialog |
+| `src/tallydesklet/ui/theme.py` | Design tokens, light/dark styling |
+| `data/tallydesklet.desktop` | Application-menu launcher |
 | `data/icons/` | Original app icon assets |
 | `debian/` | Debian packaging metadata and rules |
 | `scripts/dev-run.sh` | Development launch using system dependencies |
@@ -272,10 +277,10 @@ Keep this specification in the repository as `docs/BUILD_SPEC.md`. Add a concise
 
 ## 10. Packaging and distribution
 
-- Prefer conventional Debian packaging with debhelper and appropriate Python helpers. A build script should produce `dist/mint-meter_0.2.0-1_all.deb` for version 0.2 or the correct architecture-specific equivalent.
+- Prefer conventional Debian packaging with debhelper and appropriate Python helpers. A build script should produce `dist/tallydesklet_0.2.1-1_all.deb` for version 0.2 or the correct architecture-specific equivalent.
 - Use `Architecture: all` only if the shipped app/assets are architecture-independent and native libraries are declared system dependencies. Do not bundle architecture-specific binaries under an `all` label.
 - Provide correct dependencies, version, description, maintainer metadata, desktop entry, and icon installation.
-- Use `/usr/bin/mint-meter` as the launcher. Install private modules/resources consistently under standard Debian paths; do not depend on the build checkout or current working directory.
+- Use `/usr/bin/tallydesklet` as the launcher. Install private modules/resources consistently under standard Debian paths; do not depend on the build checkout or current working directory.
 - Build as an ordinary user; use appropriate fakeroot/root-owner handling for package ownership. Avoid unnecessary maintainer scripts.
 - Use one authoritative application version and synchronize package/release versions.
 - The app must run offline after dependencies are installed; no runtime downloads or `pip install` on launch.
@@ -286,8 +291,8 @@ Keep this specification in the repository as `docs/BUILD_SPEC.md`. Add a concise
 Expected user installation form, after substituting the actual artifact filename:
 
 ```bash
-sudo apt install ./mint-meter_0.2.0-1_all.deb
-mint-meter
+sudo apt install ./tallydesklet_0.2.1-1_all.deb
+tallydesklet
 ```
 
 Uninstallation should use the package manager. Explain separately how to disable/remove the user autostart entry and optionally delete user configuration. Package removal must not silently delete personal settings.

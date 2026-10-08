@@ -1,9 +1,9 @@
-# Testing Mint Meter
+# Testing TallyDesklet
 
-## Publication checks — version 0.2.0
+## Publication checks — version 0.2.1
 
-All 37 deterministic unit tests passed during publication preparation. The
-source launcher reports 0.2.0. Unit tests use injected counters and temporary
+All 44 deterministic unit tests passed during publication preparation. The
+source launcher reports 0.2.1. Unit tests use injected counters and temporary
 directories; they do not depend on a particular network adapter or write real
 user preferences.
 
@@ -23,6 +23,10 @@ rates, route selection, warm-up, counter resets, interface switching, resume
 gaps, bounded histories, atomic settings, monitor clamping, opt-in autostart,
 combined usage totals, midnight/Sunday rollovers, bounded storage, restart,
 corrupt-history recovery, and persistence failures.
+
+Rename tests also cover importing legacy preferences and usage, preserving
+original files, preferring new state, private file permissions, corrupt data,
+failed imports, explicit paths, and preserving opt-in login startup choices.
 
 The packaging regression test adds private files and live captures to a fixture
 source tree and asserts that only allowlisted public documents enter the package.

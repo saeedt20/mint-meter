@@ -1,12 +1,12 @@
-# Releasing Mint Meter
+# Releasing TallyDesklet
 
 The project uses the MIT license. Public maintainer metadata uses `saeedt20`
 and GitHub's noreply email. The upstream repository is
-https://github.com/saeedt20/mint-meter.
+https://github.com/saeedt20/tallydesklet.
 
 ## Validate a release
 
-Update `src/mint_meter/__init__.py` and the Debian changelog together; the
+Update `src/tallydesklet/__init__.py` and the Debian changelog together; the
 builder checks their versions match. Update `CHANGELOG.md` and review the
 physical-session checklist in `TESTING.md`.
 Update `docs/RELEASE_NOTES.md` with release-specific features, installation,
@@ -17,9 +17,9 @@ preview links, and verification limits before tagging.
 ./scripts/gui-check.sh
 ./scripts/gui-check.sh --composited
 ./scripts/gui-check.sh --hidpi
-dpkg-deb --info dist/mint-meter_0.2.0-1_all.deb
-dpkg-deb --contents dist/mint-meter_0.2.0-1_all.deb
-lintian dist/mint-meter_0.2.0-1_all.deb
+dpkg-deb --info dist/tallydesklet_0.2.1-1_all.deb
+dpkg-deb --contents dist/tallydesklet_0.2.1-1_all.deb
+lintian dist/tallydesklet_0.2.1-1_all.deb
 (cd dist && sha256sum -c SHA256SUMS)
 ```
 
@@ -46,8 +46,8 @@ First ensure main-branch CI passed. An explicitly pushed `v*` tag triggers
 `.github/workflows/release.yml`:
 
 ```sh
-git tag -a v0.2.0 -m "Mint Meter 0.2.0"
-git push origin v0.2.0
+git tag -a v0.2.1 -m "TallyDesklet 0.2.1"
+git push origin v0.2.1
 ```
 
 The workflow checks the license, public maintainer metadata, and matching

@@ -9,7 +9,7 @@ from ..config import validate
 
 class SettingsDialog(Gtk.Dialog):
     def __init__(self, app):
-        super().__init__(title="Mint Meter Settings", transient_for=app.window, modal=False)
+        super().__init__(title="TallyDesklet Settings", transient_for=app.window, modal=False)
         self.app = app
         self.set_application(app)
         self.set_default_size(460, 560)
@@ -46,7 +46,7 @@ class SettingsDialog(Gtk.Dialog):
         self.above = self.check("Always on _top", c["window"]["always_on_top"])
         self.workspaces = self.check("Show on all _workspaces", c["window"]["all_workspaces"])
         self.startup = self.check("Start at lo_gin", autostart.enabled())
-        if not Path("/usr/bin/mint-meter").is_file():
+        if not Path("/usr/bin/tallydesklet").is_file():
             self.startup.set_sensitive(False)
             self.startup.set_tooltip_text("Install the .deb to enable a stable login startup command.")
         self.status = Gtk.Label(xalign=0, wrap=True)

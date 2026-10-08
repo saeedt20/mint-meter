@@ -1,28 +1,37 @@
-# Mint Meter 0.2.0
+# TallyDesklet 0.2.1
 
 A compact GTK desktop widget for CPU, memory, filesystem capacity, network
 throughput, and daily/weekly data usage. MIT licensed; no telemetry or accounts.
 
-<img src="https://raw.githubusercontent.com/saeedt20/mint-meter/v0.2.0/docs/examples/dark.png" alt="Actual GTK interface rendered with illustrative example data" width="320">
+This release renames **Mint Meter** to **TallyDesklet**, including the repository,
+application menu entry, package, and command. The `mint-meter` command remains
+available for existing scripts and opt-in login entries.
+
+<img src="https://raw.githubusercontent.com/saeedt20/tallydesklet/v0.2.1/docs/examples/dark.png" alt="Actual GTK interface rendered with illustrative example data" width="320">
 
 The preview shows the real GTK interface with fixed example data, not a user's
 live measurements. More previews and instructions are in the
-[README](https://github.com/saeedt20/mint-meter/blob/v0.2.0/README.md).
+[README](https://github.com/saeedt20/tallydesklet/blob/v0.2.1/README.md).
 
 ## Download and install
 
-Download **mint-meter_0.2.0-1_all.deb** and **SHA256SUMS** from the assets below,
+Download **tallydesklet_0.2.1-1_all.deb** and **SHA256SUMS** from the assets below,
 then run in that directory:
 
 ```sh
 sha256sum -c SHA256SUMS
-sudo apt install ./mint-meter_0.2.0-1_all.deb
-mint-meter
+sudo apt install ./tallydesklet_0.2.1-1_all.deb
+tallydesklet
 ```
 
 The package declares distribution-provided Python, GTK 3, Cairo, psutil, and
 iproute2 dependencies. It targets Xfce/X11. Installation does not launch the
 app or enable startup at login.
+
+If upgrading, quit the old app with `mint-meter --quit` before installation.
+Apt replaces the old package. First launch copies legacy preferences and usage
+only when the new files are absent; original files remain intact. Existing
+TallyDesklet state takes priority. Login startup stays opt-in.
 
 ## Features
 

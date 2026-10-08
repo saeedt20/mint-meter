@@ -12,7 +12,7 @@ from .theme import CYAN, HEIGHT, RADIUS, THEMES, WIDTH, color, rounded
 
 class MeterWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
-        super().__init__(application=app, title="Mint Meter")
+        super().__init__(application=app, title="TallyDesklet")
         self.app = app
         self.sample = None
         self.cpu, self.down, self.up = History(), History(), History()
@@ -31,10 +31,10 @@ class MeterWindow(Gtk.ApplicationWindow):
         visual = screen.get_rgba_visual()
         if visual:
             self.set_visual(visual)
-        self.get_style_context().add_class("mint-meter")
+        self.get_style_context().add_class("tallydesklet")
         css = Gtk.CssProvider()
-        css.load_from_data(b"window.mint-meter { background: transparent; } "
-                           b".mint-gear { background: transparent; border: none; box-shadow: none; padding: 0; min-width: 24px; min-height: 24px; }")
+        css.load_from_data(b"window.tallydesklet { background: transparent; } "
+                           b".tallydesklet-gear { background: transparent; border: none; box-shadow: none; padding: 0; min-width: 24px; min-height: 24px; }")
         Gtk.StyleContext.add_provider_for_screen(screen, css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.fixed = Gtk.Fixed()
         self.add(self.fixed)
@@ -51,9 +51,9 @@ class MeterWindow(Gtk.ApplicationWindow):
         self.fixed.put(self.canvas, 0, 0)
         self.gear = Gtk.Button()
         self.gear.set_image(Gtk.Image.new_from_icon_name("emblem-system-symbolic", Gtk.IconSize.MENU))
-        self.gear.get_style_context().add_class("mint-gear")
-        self.gear.set_tooltip_text("Mint Meter menu")
-        self.gear.get_accessible().set_name("Mint Meter settings and actions")
+        self.gear.get_style_context().add_class("tallydesklet-gear")
+        self.gear.set_tooltip_text("TallyDesklet menu")
+        self.gear.get_accessible().set_name("TallyDesklet settings and actions")
         self.gear.connect("clicked", lambda button: self.show_menu())
         self.fixed.put(self.gear, 280, 12)
         self.connect("delete-event", lambda *_: app.quit() or True)
@@ -87,7 +87,7 @@ class MeterWindow(Gtk.ApplicationWindow):
         self.set_keep_above(above)
         self.set_keep_below(not above)
         self.stick() if settings["all_workspaces"] else self.unstick()
-        self.gear.get_style_context().add_class("mint-gear")
+        self.gear.get_style_context().add_class("tallydesklet-gear")
         fg = Gdk.RGBA()
         fg.parse(THEMES[self.config["appearance"]["theme"]]["muted"])
         self.gear.override_color(Gtk.StateFlags.NORMAL, fg)
@@ -214,7 +214,7 @@ class MeterWindow(Gtk.ApplicationWindow):
                          f"{quantity(metric.available, binary)} available" if metric else f"{name}: Unavailable")
         lines += [f"Filesystem containing: {self.config['disk']['path']}",
                   f"Weekly usage: {quantity(s.usage.weekly, binary)}; daily usage: {quantity(s.usage.daily, binary)}",
-                  "Usage combines download + upload on the selected interface while Mint Meter runs.",
+                  "Usage combines download + upload on the selected interface while TallyDesklet runs.",
                   "Daily reset: local midnight. Weekly reset: Sunday, local midnight.",
                   "Unobserved traffic during closure, reconnects or gaps over 15 seconds is excluded.",
                   f"Interface: {s.network.interface or self.config['network']['interface']} · {s.network.status}",

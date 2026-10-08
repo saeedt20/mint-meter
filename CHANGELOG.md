@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 — TallyDesklet
+
+- Rename the app, repository, package, and command to TallyDesklet.
+- Import legacy preferences and usage while preserving originals and newer state.
+- Keep the old command and existing opt-in login entries working.
+- Update documentation and privacy-safe native GTK previews.
+
 ## 0.2.0 — 2026-10-08
 
 - Add weekly usage on the left and daily usage on the right, immediately above Network.

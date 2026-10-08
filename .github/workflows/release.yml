@@ -15,7 +15,7 @@ jobs:
         run: |
           test -s LICENSE
           ! grep -q 'example.invalid' debian/control
-          PYTHONPATH=src /usr/bin/python3 -c 'import os; from mint_meter import __version__; assert os.environ["GITHUB_REF_NAME"] == "v" + __version__'
+          PYTHONPATH=src /usr/bin/python3 -c 'import os; from tallydesklet import __version__; assert os.environ["GITHUB_REF_NAME"] == "v" + __version__'
       - name: Install build and GUI dependencies
         run: |
           sudo apt-get update
@@ -24,9 +24,9 @@ jobs:
         run: |
           ./scripts/build-deb.sh
           ./scripts/gui-check.sh
-          desktop-file-validate data/mint-meter.desktop
+          desktop-file-validate data/tallydesklet.desktop
           lintian --fail-on error dist/*.deb
       - name: Publish release artifacts
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/*.deb dist/SHA256SUMS --verify-tag --title "Mint Meter $GITHUB_REF_NAME" --notes-file docs/RELEASE_NOTES.md
+        run: gh release create "$GITHUB_REF_NAME" dist/*.deb dist/SHA256SUMS --verify-tag --title "TallyDesklet $GITHUB_REF_NAME" --notes-file docs/RELEASE_NOTES.md

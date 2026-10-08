@@ -60,7 +60,7 @@ class Collector:
         self.stop_event = threading.Event()
         self.wake = threading.Event()
         self.results = queue.Queue(maxsize=1)
-        self.thread = threading.Thread(target=self._run, name="mint-meter-sampler", daemon=True)
+        self.thread = threading.Thread(target=self._run, name="tallydesklet-sampler", daemon=True)
 
     def start(self):
         self.thread.start()

@@ -14,7 +14,7 @@ jobs:
       - name: Build and test
         run: |
           ./scripts/build-deb.sh
-          desktop-file-validate data/mint-meter.desktop
+          desktop-file-validate data/tallydesklet.desktop
           ./scripts/gui-check.sh
           lintian --fail-on error dist/*.deb
           cd dist && sha256sum -c SHA256SUMS
@@ -22,7 +22,7 @@ jobs:
         run: dpkg-buildpackage -us -uc -b
       - uses: actions/upload-artifact@v7.0.2
         with:
-          name: mint-meter-deb
+          name: tallydesklet-deb
           path: |
             dist/*.deb
             dist/SHA256SUMS

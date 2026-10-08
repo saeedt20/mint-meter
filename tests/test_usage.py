@@ -7,9 +7,9 @@ from types import SimpleNamespace as NS
 import unittest
 from unittest.mock import patch
 
-from mint_meter.config import DEFAULTS
-from mint_meter.metrics import Collector
-from mint_meter.usage import UsageStore, UsageTracker
+from tallydesklet.config import DEFAULTS
+from tallydesklet.metrics import Collector
+from tallydesklet.usage import UsageStore, UsageTracker
 
 
 THURSDAY = date(2026, 10, 8)
@@ -79,7 +79,7 @@ class UsageStoreTests(unittest.TestCase):
     def test_xdg_path_atomic_private_restart_and_closed_traffic(self):
         with tempfile.TemporaryDirectory() as temp, patch.dict(os.environ, {"XDG_STATE_HOME": temp}):
             store = UsageStore()
-            self.assertEqual(store.path, Path(temp) / "mint-meter/usage.json")
+            self.assertEqual(store.path, Path(temp) / "tallydesklet/usage.json")
             tracker = store.load(THURSDAY)
             tracker.observe(1, THURSDAY, "eth0", NS(bytes_recv=100, bytes_sent=0))
             tracker.observe(2, THURSDAY, "eth0", NS(bytes_recv=150, bytes_sent=10))
@@ -107,7 +107,7 @@ class UsageStoreTests(unittest.TestCase):
             tracker = store.load(THURSDAY)
             store.save(tracker)
             before = store.path.read_bytes()
-            with patch("mint_meter.config.os.replace", side_effect=OSError("failed save")):
+            with patch("tallydesklet.config.os.replace", side_effect=OSError("failed save")):
                 with self.assertRaises(OSError):
                     store.save(tracker)
             self.assertEqual(store.path.read_bytes(), before)
@@ -126,15 +126,15 @@ class CollectorUsageTests(unittest.TestCase):
                 clock[0] = [2., 3.][len(samples)-1]
 
         collector.wake.wait = wait
-        with patch("mint_meter.metrics.UsageStore", return_value=store), \
-             patch("mint_meter.metrics.monotonic_time", side_effect=lambda: clock[0]), \
-             patch("mint_meter.metrics.psutil.cpu_percent", return_value=10), \
-             patch("mint_meter.metrics.psutil.virtual_memory", return_value=NS(total=1000, available=500)), \
-             patch("mint_meter.metrics.disk_capacity", return_value=None), \
-             patch("mint_meter.metrics.psutil.net_if_stats", return_value={"eth0": NS(isup=True)}), \
-             patch("mint_meter.metrics.psutil.net_io_counters", side_effect=lambda **kw: {
+        with patch("tallydesklet.metrics.UsageStore", return_value=store), \
+             patch("tallydesklet.metrics.monotonic_time", side_effect=lambda: clock[0]), \
+             patch("tallydesklet.metrics.psutil.cpu_percent", return_value=10), \
+             patch("tallydesklet.metrics.psutil.virtual_memory", return_value=NS(total=1000, available=500)), \
+             patch("tallydesklet.metrics.disk_capacity", return_value=None), \
+             patch("tallydesklet.metrics.psutil.net_if_stats", return_value={"eth0": NS(isup=True)}), \
+             patch("tallydesklet.metrics.psutil.net_io_counters", side_effect=lambda **kw: {
                  "eth0": NS(bytes_recv=int(clock[0]*1000), bytes_sent=0)}), \
-             patch("mint_meter.metrics.route_candidates", side_effect=routes):
+             patch("tallydesklet.metrics.route_candidates", side_effect=routes):
             collector._run()
         return samples
 

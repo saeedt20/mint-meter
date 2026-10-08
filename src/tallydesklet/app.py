@@ -8,12 +8,12 @@ from . import __version__
 
 
 def parser():
-    result = argparse.ArgumentParser(prog="mint-meter", description="A compact desktop system monitor")
+    result = argparse.ArgumentParser(prog="tallydesklet", description="A compact desktop system monitor")
     group = result.add_mutually_exclusive_group()
     group.add_argument("--settings", action="store_true", help="open preferences")
     group.add_argument("--reset-position", action="store_true", help="restore the upper-right position")
     group.add_argument("--quit", action="store_true", help="quit the running instance")
-    result.add_argument("--version", action="version", version=f"Mint Meter {__version__}")
+    result.add_argument("--version", action="version", version=f"TallyDesklet {__version__}")
     return result
 
 
@@ -31,16 +31,16 @@ def main(argv=None):
         from .ui.settings import SettingsDialog
         from .ui.widget import MeterWindow
     except (ImportError, ValueError) as error:
-        print(f"Mint Meter requires the system GTK 3 / Cairo / psutil packages: {error}", file=sys.stderr)
+        print(f"TallyDesklet requires the system GTK 3 / Cairo / psutil packages: {error}", file=sys.stderr)
         return 1
     if Gdk.Display.get_default() is None:
-        print("Mint Meter needs a graphical session (X11 recommended).", file=sys.stderr)
+        print("TallyDesklet needs a graphical session (X11 recommended).", file=sys.stderr)
         return 1
-    Gtk.Window.set_default_icon_name("mint-meter")
+    Gtk.Window.set_default_icon_name("tallydesklet")
 
     class Application(Gtk.Application):
         def __init__(self):
-            super().__init__(application_id="org.mintmeter.Widget", flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+            super().__init__(application_id="org.tallydesklet.Widget", flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
             self.window = self.settings = self.collector = None
             self.poll_id = 0
             self.store = ConfigStore()
@@ -125,4 +125,4 @@ def main(argv=None):
     app = Application()
     for sig in (signal.SIGINT, signal.SIGTERM):
         GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, sig, lambda: app.quit() or False)
-    return app.run(["mint-meter"] + list(args))
+    return app.run(["tallydesklet"] + list(args))

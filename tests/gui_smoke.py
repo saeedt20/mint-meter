@@ -77,17 +77,17 @@ def desktop_checks(window, settings, env, config):
     time.sleep(.3)
     run("xdotool", "windowactivate", "--sync", settings, "key", "Escape")
     time.sleep(.3)
-    assert not windows("Mint Meter Settings"), "Settings did not close after Escape (lock)"
+    assert not windows("TallyDesklet Settings"), "Settings did not close after Escape (lock)"
     before = geometry(window)
     drag(window)
     assert geometry(window) == before, f"Locked card moved: before={before}, after={geometry(window)}, config={config.read_text()}"
     subprocess.run(COMMAND + ["--settings"], env=env, check=True, timeout=10)
-    settings = await_window("Mint Meter Settings")
+    settings = await_window("TallyDesklet Settings")
     run("xdotool", "windowactivate", "--sync", settings, "key", "alt+l", "alt+a")
     time.sleep(.3)
     run("xdotool", "windowactivate", "--sync", settings, "key", "Escape")
     time.sleep(.3)
-    assert not windows("Mint Meter Settings"), "Settings did not close after Escape (unlock)"
+    assert not windows("TallyDesklet Settings"), "Settings did not close after Escape (unlock)"
     drag(window)
     after = geometry(window)
     assert (after["X"], after["Y"]) != (before["X"], before["Y"]), f"Unlocked card did not move: {config.read_text()}"
@@ -106,7 +106,7 @@ def desktop_checks(window, settings, env, config):
 
 
 def soak(process, window, output):
-    seconds = int(os.environ.get("MINT_METER_SOAK_SECONDS", "0"))
+    seconds = int(os.environ.get("TALLYDESKLET_SOAK_SECONDS", "0"))
     if not seconds:
         return
     p = psutil.Process(process.pid)
@@ -134,26 +134,26 @@ def main():
     options = parser.parse_args()
     if options.installed_root:
         prefix = options.installed_root
-        COMMAND = [options.proot, "-b", f"{prefix}/usr/share/mint-meter:/usr/share/mint-meter",
-                   "-b", f"{prefix}/usr/bin/mint-meter:/usr/bin/mint-meter", "-w", "/tmp", "/usr/bin/mint-meter"]
+        COMMAND = [options.proot, "-b", f"{prefix}/usr/share/tallydesklet:/usr/share/tallydesklet",
+                   "-b", f"{prefix}/usr/bin/tallydesklet:/usr/bin/tallydesklet", "-w", "/tmp", "/usr/bin/tallydesklet"]
     output = ROOT / "dist/gui-screenshots"
     if options.installed_root:
         output = ROOT / "dist/installed-screenshots"
     elif os.environ.get("GDK_SCALE") == "2":
         output = ROOT / "dist/hidpi-screenshots"
     output.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix="mint-meter-gui-") as temp:
+    with tempfile.TemporaryDirectory(prefix="tallydesklet-gui-") as temp:
         env = dict(os.environ, XDG_CONFIG_HOME=temp, XDG_STATE_HOME=temp)
         log = Path(temp) / "stderr.log"
         for theme, scale in (("dark", 1), ("light", 1), ("dark", 2)):
-            config = Path(temp) / "mint-meter/config.json"
-            usage_file = Path(temp) / "mint-meter/usage.json"
+            config = Path(temp) / "tallydesklet/config.json"
+            usage_file = Path(temp) / "tallydesklet/usage.json"
             config.parent.mkdir(exist_ok=True)
             config.write_text(json.dumps({"appearance": {"theme": theme, "scale": scale}}))
             with log.open("w") as stream:
                 process = subprocess.Popen(COMMAND, env=env, stdout=stream, stderr=stream)
                 try:
-                    window = await_window("Mint Meter")
+                    window = await_window("TallyDesklet")
                     time.sleep(3)
                     # The WM starts alongside this process; dispatch compositor
                     # selection changes before querying GDK's cached state.
@@ -167,15 +167,15 @@ def main():
                     screen_scale = int(os.environ.get("GDK_SCALE", "1"))
                     assert (int(g["WIDTH"]), int(g["HEIGHT"])) == (320*scale*screen_scale, 330*scale*screen_scale), g
                     composited = Gdk.Screen.get_default().is_composited()
-                    assert composited == (os.environ.get("MINT_METER_COMPOSITOR") == "on"), "Unexpected compositor state"
+                    assert composited == (os.environ.get("TALLYDESKLET_COMPOSITOR") == "on"), "Unexpected compositor state"
                     screenshot(window, output / f"{theme}-{scale}x.png")
                     if theme == "dark" and scale == 1:
                         soak(process, window, output)
                     subprocess.run(COMMAND + ["--settings"], env=env, check=True, timeout=10)
-                    settings = await_window("Mint Meter Settings")
+                    settings = await_window("TallyDesklet Settings")
                     subprocess.run(COMMAND, env=env, check=True, timeout=10)
-                    assert len(windows("Mint Meter")) == 1
-                    assert len(windows("Mint Meter Settings")) == 1
+                    assert len(windows("TallyDesklet")) == 1
+                    assert len(windows("TallyDesklet Settings")) == 1
                     screenshot(settings, output / "settings.png")
                     if theme == "dark" and scale == 1:
                         desktop_checks(window, settings, env, config)
@@ -187,7 +187,7 @@ def main():
                         assert 1 <= len(usage_before["days"]) <= 7
                         assert all(type(v) is int and v >= 0 for v in usage_before["days"].values())
                         process = subprocess.Popen(COMMAND, env=env, stdout=stream, stderr=stream)
-                        window = await_window("Mint Meter")
+                        window = await_window("TallyDesklet")
                         time.sleep(.3)
                         restored = geometry(window)
                         assert (restored["X"], restored["Y"]) == (saved_geometry["X"], saved_geometry["Y"])
@@ -199,7 +199,7 @@ def main():
                     else:
                         run("xdotool", "windowactivate", "--sync", settings, "key", "Escape")
                     time.sleep(.2)
-                    assert not windows("Mint Meter Settings"), "Escape did not close settings"
+                    assert not windows("TallyDesklet Settings"), "Escape did not close settings"
                     subprocess.run(COMMAND + ["--reset-position"], env=env, check=True, timeout=10)
                     assert json.loads(config.read_text())["window"]["position"] is None
                     subprocess.run(COMMAND + ["--quit"], env=env, check=True, timeout=10)

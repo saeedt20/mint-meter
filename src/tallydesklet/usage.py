@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import time
 
-from .config import atomic_write
+from .config import atomic_write, import_legacy_file
 
 
 @dataclass(frozen=True)
@@ -68,10 +68,12 @@ class UsageStore:
     def __init__(self, path=None):
         value = os.environ.get("XDG_STATE_HOME", "")
         home = Path(value) if value.startswith("/") else Path.home() / ".local/state"
-        self.path = Path(path) if path else home / "mint-meter/usage.json"
+        self.path = Path(path) if path else home / "tallydesklet/usage.json"
+        self.legacy = None if path else home / "mint-meter/usage.json"
         self.notice = None
 
     def load(self, today):
+        import_legacy_file(self.path, self.legacy)
         try:
             raw = json.loads(self.path.read_text(encoding="utf-8"))
             if not isinstance(raw, dict) or raw.get("schema_version") != 1:

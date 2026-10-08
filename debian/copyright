@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: Mint Meter
+Upstream-Name: TallyDesklet
 Upstream-Contact: saeedt20 <132300919+saeedt20@users.noreply.github.com>
-Source: https://github.com/saeedt20/mint-meter
+Source: https://github.com/saeedt20/tallydesklet
 
 Files: *
 Copyright: 2026 saeedt20

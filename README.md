@@ -1,13 +1,13 @@
-# Mint Meter
+# TallyDesklet
 
 A compact desktop widget for live CPU, memory, disk, network speed, and daily
 and weekly data usage. Built with Python 3, GTK 3, Cairo, and psutil for Xfce
 on X11. Measurements and preferences stay on your computer.
 
-Mint Meter is an independent project, not an official Linux Mint product.
-Current version: **0.2.0**.
+TallyDesklet is an independent project, not an official Linux Mint product.
+Current version: **0.2.1**.
 
-[Download v0.2.0](https://github.com/saeedt20/mint-meter/releases/tag/v0.2.0)
+[Download v0.2.1](https://github.com/saeedt20/tallydesklet/releases/tag/v0.2.1)
 · [Installation](#install-a-debian-package) · [Build from source](#build-the-package)
 
 ## Preview
@@ -53,8 +53,8 @@ positioning and desktop stacking have limitations described below.
 Clone the repository and enter its directory:
 
 ```sh
-git clone https://github.com/saeedt20/mint-meter.git
-cd mint-meter
+git clone https://github.com/saeedt20/tallydesklet.git
+cd tallydesklet
 ```
 
 Install the distribution dependencies:
@@ -78,30 +78,42 @@ the system GTK bindings. Run the widget as your normal user.
 
 ## Install a Debian package
 
-Download `mint-meter_0.2.0-1_all.deb` and `SHA256SUMS` from the
-[latest release](https://github.com/saeedt20/mint-meter/releases/latest), or
+Download `tallydesklet_0.2.1-1_all.deb` and `SHA256SUMS` from the
+[latest release](https://github.com/saeedt20/tallydesklet/releases/latest), or
 build the package below. In the download directory:
 
 ```sh
 sha256sum -c SHA256SUMS
-sudo apt install ./mint-meter_0.2.0-1_all.deb
-mint-meter
+sudo apt install ./tallydesklet_0.2.1-1_all.deb
+tallydesklet
 ```
 
-For a local build, first enter `dist/`. The menu launcher is **Mint Meter**
+For a local build, first enter `dist/`. The menu launcher is **TallyDesklet**
 under System. Installation neither launches the widget nor enables login startup.
 
 ```sh
-mint-meter --settings
-mint-meter --reset-position
-mint-meter --quit
-mint-meter --version
+tallydesklet --settings
+tallydesklet --reset-position
+tallydesklet --quit
+tallydesklet --version
 ```
 
 Drag the header to move. Click the gear or right-click the card for Settings,
 Lock position, Always on top, Reset position and Quit. A second ordinary launch
 opens settings. Settings controls have keyboard mnemonics; Escape closes them.
 Enable **Start at login** in settings after installation.
+
+### Upgrade from Mint Meter
+
+Quit the old app with `mint-meter --quit` before installing this release. Apt
+replaces the `mint-meter` package with `tallydesklet`; the old command remains
+available as a compatibility launcher.
+
+On first launch, TallyDesklet copies existing `mint-meter/config.json` and
+`mint-meter/usage.json` from their XDG directories if the corresponding new
+file is absent. Original files remain intact, and existing TallyDesklet files
+take priority. Existing opt-in login entries keep working. Changing **Start at
+login** replaces or removes the legacy entry only after your explicit choice.
 
 ## Controls and settings
 
@@ -120,7 +132,7 @@ The default position is the upper-right work area with a 24-pixel margin.
 
 ## Build the package
 
-Mint Meter is a Python application, so no native compilation is needed.
+TallyDesklet is a Python application, so no native compilation is needed.
 Packaging copies the source and assets into a `.deb`; native runtime libraries
 come from distribution packages. Install the runtime dependencies above and
 the package builder:
@@ -130,11 +142,11 @@ sudo apt install dpkg
 ./scripts/build-deb.sh
 cd dist
 sha256sum -c SHA256SUMS
-sudo apt install ./mint-meter_0.2.0-1_all.deb
+sudo apt install ./tallydesklet_0.2.1-1_all.deb
 ```
 
 The rootless build runs the unit tests and creates
-`dist/mint-meter_0.2.0-1_all.deb` and `dist/SHA256SUMS`. Do not run the build with
+`dist/tallydesklet_0.2.1-1_all.deb` and `dist/SHA256SUMS`. Do not run the build with
 sudo. Built packages belong in release assets rather than source control.
 
 ## Development and verification
@@ -147,7 +159,7 @@ PYTHONPATH=src /usr/bin/python3 -m unittest discover -s tests -v
 ```
 
 `build-deb.sh` tests and builds rootlessly with `dpkg-deb --root-owner-group`,
-producing `dist/mint-meter_0.2.0-1_all.deb` and `dist/SHA256SUMS`. The deterministic
+producing `dist/tallydesklet_0.2.1-1_all.deb` and `dist/SHA256SUMS`. The deterministic
 staging installer is shared with conventional debhelper packaging:
 
 ```sh
@@ -168,7 +180,7 @@ sudo apt install xvfb xauth xfwm4 xdotool wmctrl x11-utils
 ./scripts/gui-check.sh --hidpi
 ```
 
-The application version in `src/mint_meter/__init__.py` is authoritative. The
+The application version in `src/tallydesklet/__init__.py` is authoritative. The
 builder rejects a differing upstream version in `debian/changelog`.
 
 GUI checks use an isolated X display, D-Bus session, and temporary preferences.
@@ -178,7 +190,7 @@ real login startup, or suspend/resume integration.
 
 | Directory | Purpose |
 | --- | --- |
-| `src/mint_meter/` | Application, sampling, persistence, and GTK interface |
+| `src/tallydesklet/` | Application, sampling, persistence, and GTK interface |
 | `tests/` | Deterministic unit tests and isolated GUI checks |
 | `scripts/` | Development launcher and package/test tools |
 | `data/` | Desktop launcher, original icon, and manual page |
@@ -215,7 +227,7 @@ Decimal units use powers of 1000 (`GB`, `MB/s`); binary units use 1024
 (`GiB`, `MiB/s`). RAM/disk bars use exactly the same used/total ratio as the labels.
 
 **Data usage** combines received and sent bytes on the selected interface while
-Mint Meter runs. Daily usage resets at local midnight; weekly usage resets Sunday
+TallyDesklet runs. Daily usage resets at local midnight; weekly usage resets Sunday
 at local midnight. Totals survive normal quit/restart, but traffic while the app
 is closed is excluded. Interface changes, unreadable/reset counters and gaps over
 15 seconds establish new baselines; ambiguous traffic is excluded. A valid sample
@@ -224,8 +236,8 @@ the accumulated total and begins counting the new interface after its baseline.
 These are observed totals, not an ISP bill or historical whole-system accounting.
 Initial days/weeks may be partial; the tooltip shows when tracking began.
 
-Usage is saved atomically under `$XDG_STATE_HOME/mint-meter/usage.json`, defaulting
-to `~/.local/state/mint-meter/usage.json`. Only seven daily aggregates are retained.
+Usage is saved atomically under `$XDG_STATE_HOME/tallydesklet/usage.json`, defaulting
+to `~/.local/state/tallydesklet/usage.json`. Only seven daily aggregates are retained.
 Writes occur at most once per minute and on normal exit; an abrupt kill or power
 loss can lose up to the last minute. Corrupt history is preserved as
 `usage.broken-<timestamp>.json` and tracking restarts with a tooltip notice. Read
@@ -233,38 +245,41 @@ failures show unavailable totals; save failures keep live totals and show a noti
 
 ## Preferences and removal
 
-Preferences: `$XDG_CONFIG_HOME/mint-meter/config.json`, defaulting to
-`~/.config/mint-meter/config.json`. Saves are atomic. Invalid files are preserved
+Preferences: `$XDG_CONFIG_HOME/tallydesklet/config.json`, defaulting to
+`~/.config/tallydesklet/config.json`. Saves are atomic. Invalid files are preserved
 as `config.broken-<timestamp>.json` before defaults are loaded. Samples are never
 written to disk. Autostart state comes from the actual user desktop entry.
 
 Disable **Start at login**, quit, then uninstall:
 
 ```sh
-mint-meter --quit
-sudo apt remove mint-meter
+tallydesklet --quit
+sudo apt remove tallydesklet
 ```
 
 The package manager preserves personal settings. If already uninstalled, delete
-only `mint-meter.desktop` from `${XDG_CONFIG_HOME:-$HOME/.config}/autostart/`.
-Optionally delete `${XDG_CONFIG_HOME:-$HOME/.config}/mint-meter/` to remove saved
+only `tallydesklet.desktop` and, if upgrading, `mint-meter.desktop` from
+`${XDG_CONFIG_HOME:-$HOME/.config}/autostart/`.
+Optionally delete `${XDG_CONFIG_HOME:-$HOME/.config}/tallydesklet/` to remove saved
 preferences. Development startup is deliberately disabled until the stable
-`/usr/bin/mint-meter` launcher exists.
+`/usr/bin/tallydesklet` launcher exists.
 To also remove usage history, quit the app and optionally delete only
-`${XDG_STATE_HOME:-$HOME/.local/state}/mint-meter/`.
+`${XDG_STATE_HOME:-$HOME/.local/state}/tallydesklet/`.
+If you upgraded, the original `mint-meter` preferences and usage directories
+are also preserved. Remove those only if you no longer need the backups.
 
 ## Troubleshooting
 
 | Symptom | What to check |
 | --- | --- |
 | `No module named gi` or `cairo` | Install the distribution dependencies and use `/usr/bin/python3` |
-| Widget seems missing | Run `mint-meter --reset-position`, then `mint-meter --settings` |
+| Widget seems missing | Run `tallydesklet --reset-position`, then `tallydesklet --settings` |
 | Disk shows Unavailable | Select an existing accessible path in Settings |
 | Network is Offline or Unavailable | Check routing and select the intended interface in Settings |
 | Background appears opaque | Check whether the desktop compositor is enabled; opaque fallback is supported |
 | Startup option is unavailable in a source checkout | Install the `.deb` to provide the stable launcher |
 
-Use `./scripts/dev-run.sh` in place of `mint-meter` for a source checkout.
+Use `./scripts/dev-run.sh` in place of `tallydesklet` for a source checkout.
 When reporting problems, avoid posting private paths, interface names, or
 screenshots with personal readings. Share only environment details you intend
 to make public.
@@ -282,7 +297,7 @@ The complete requirements are kept once in [the build specification](docs/BUILD_
 
 ## Privacy
 
-Mint Meter has no telemetry, accounts, cloud service, or background web server.
+TallyDesklet has no telemetry, accounts, cloud service, or background web server.
 It reads local system counters and generates no traffic to measure network
 speed. Configuration and the bounded usage history stay in the XDG directories
 described above. Live readings can reveal machine capacity and activity, so
