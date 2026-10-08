@@ -1,0 +1,15 @@
+Source: mint-meter
+Section: utils
+Priority: optional
+Maintainer: saeedt20 <132300919+saeedt20@users.noreply.github.com>
+Build-Depends: debhelper-compat (= 13), dh-python, python3, python3-psutil
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: mint-meter
+Architecture: all
+Depends: python3 (>= 3.10), python3-gi, python3-gi-cairo, python3-cairo, python3-psutil, gir1.2-gtk-3.0, iproute2, ${misc:Depends}, ${python3:Depends}
+Description: compact desktop system monitor for Xfce
+ A lightweight GTK 3 desktop card showing live CPU, memory, filesystem
+ capacity and network throughput with small history graphs. Includes
+ appearance settings, position controls and opt-in login startup.

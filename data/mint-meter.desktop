@@ -1,0 +1,24 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Mint Meter
+Comment=Compact desktop CPU, memory, storage and network monitor
+Exec=mint-meter
+Icon=mint-meter
+Terminal=false
+Categories=System;Monitor;
+Keywords=CPU;RAM;disk;network;widget;
+StartupNotify=false
+Actions=Settings;Reset;Quit;
+
+[Desktop Action Settings]
+Name=Settings
+Exec=mint-meter --settings
+
+[Desktop Action Reset]
+Name=Reset Position
+Exec=mint-meter --reset-position
+
+[Desktop Action Quit]
+Name=Quit
+Exec=mint-meter --quit

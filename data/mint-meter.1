@@ -1,0 +1,38 @@
+.TH MINT-METER 1 "October 2026" "Mint Meter" "User Commands"
+.SH NAME
+mint-meter \- compact desktop system monitor
+.SH SYNOPSIS
+.B mint-meter
+.RB [ --settings | --reset-position | --quit | --version ]
+.SH DESCRIPTION
+Shows CPU, RAM, filesystem capacity and throughput on one routed network
+interface. Designed for Xfce on X11. Launching again opens preferences.
+.SH DATA USAGE
+Weekly usage appears left and daily usage right above Network. Totals combine
+download and upload on the selected interface while the app runs. Daily totals
+reset at local midnight; weekly totals reset Sunday at local midnight.
+Totals persist across normal restarts. Traffic while closed and ambiguous
+reconnect/reset or sampling-gap traffic is excluded. Initial periods may be partial.
+.SH OPTIONS
+.TP
+.B --settings
+Open the preferences dialog.
+.TP
+.B --reset-position
+Restore the widget to the primary monitor's upper-right work area.
+.TP
+.B --quit
+Quit the running instance.
+.TP
+.B --version
+Print the version without opening a display.
+.SH FILES
+.I $XDG_CONFIG_HOME/mint-meter/config.json
+(defaults to ~/.config/mint-meter/config.json).
+.PP
+.I $XDG_STATE_HOME/mint-meter/usage.json
+(defaults to ~/.local/state/mint-meter/usage.json). At most seven daily totals;
+checkpointed once per minute and on normal exit.
+.SH NOTES
+Startup at login is opt-in. Package removal retains personal settings and
+the user autostart entry; disable startup in preferences before removal.

@@ -1,0 +1,32 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Verify owner metadata and version
+        run: |
+          test -s LICENSE
+          ! grep -q 'example.invalid' debian/control
+          PYTHONPATH=src /usr/bin/python3 -c 'import os; from mint_meter import __version__; assert os.environ["GITHUB_REF_NAME"] == "v" + __version__'
+      - name: Install build and GUI dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-gi python3-gi-cairo python3-cairo python3-psutil gir1.2-gtk-3.0 iproute2 xvfb xauth xfwm4 xdotool wmctrl x11-utils lintian desktop-file-utils
+      - name: Verify and build
+        run: |
+          ./scripts/build-deb.sh
+          ./scripts/gui-check.sh
+          desktop-file-validate data/mint-meter.desktop
+          lintian --fail-on error dist/*.deb
+      - name: Publish release artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/*.deb dist/SHA256SUMS --verify-tag --generate-notes

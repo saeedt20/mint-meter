@@ -1,0 +1,28 @@
+name: Test and package
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Install distribution dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-gi python3-gi-cairo python3-cairo python3-psutil gir1.2-gtk-3.0 iproute2 debhelper dh-python lintian xvfb xauth xfwm4 xdotool wmctrl x11-utils desktop-file-utils
+      - name: Build and test
+        run: |
+          ./scripts/build-deb.sh
+          desktop-file-validate data/mint-meter.desktop
+          ./scripts/gui-check.sh
+          lintian --fail-on error dist/*.deb
+          cd dist && sha256sum -c SHA256SUMS
+      - name: Conventional Debian build
+        run: dpkg-buildpackage -us -uc -b
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: mint-meter-deb
+          path: |
+            dist/*.deb
+            dist/SHA256SUMS

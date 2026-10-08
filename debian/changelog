@@ -1,0 +1,13 @@
+mint-meter (0.2.0-1) unstable; urgency=medium
+
+  * Add persistent daily and Sunday-based weekly combined network usage.
+  * Place usage above Network in a compact two-column card.
+  * Match live network rate timestamps to counter capture.
+
+ -- saeedt20 <132300919+saeedt20@users.noreply.github.com>  Thu, 08 Oct 2026 00:00:00 +0000
+
+mint-meter (0.1.0-1) unstable; urgency=medium
+
+  * Initial release of Mint Meter.
+
+ -- saeedt20 <132300919+saeedt20@users.noreply.github.com>  Mon, 28 Sep 2026 00:00:00 +0000
