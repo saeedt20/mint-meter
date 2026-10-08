@@ -9,6 +9,8 @@ https://github.com/saeedt20/mint-meter.
 Update `src/mint_meter/__init__.py` and the Debian changelog together; the
 builder checks their versions match. Update `CHANGELOG.md` and review the
 physical-session checklist in `TESTING.md`.
+Update `docs/RELEASE_NOTES.md` with release-specific features, installation,
+preview links, and verification limits before tagging.
 
 ```sh
 ./scripts/build-deb.sh
@@ -53,3 +55,7 @@ version; runs tests and isolated GUI checks; builds and validates the package;
 then creates a release with the `.deb` and `SHA256SUMS`. Only that job receives
 contents-write permission. A normal main-branch push does not create a release.
 Keep built packages out of Git and attach them as release assets instead.
+
+Curated previews in `docs/examples/` are rendered with fixed example data and
+may be published. Live GUI captures and private reports under `dist/` remain
+excluded. Package staging copies only the three reviewed example images by name.

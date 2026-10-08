@@ -20,8 +20,11 @@ class PackagePrivacyTests(unittest.TestCase):
                      "data/icons/mint-meter.svg", "data/mint-meter.1",
                      "debian/copyright", "debian/changelog", "README.md", "LICENSE"]
             files += [f"docs/{name}" for name in public]
+            examples = ("dark.png", "light.png", "settings.png")
+            files += [f"docs/examples/{name}" for name in examples]
             private = ["docs/screenshots/live.png", "docs/resource-check.json",
-                       "docs/LOCAL_VERIFICATION.md", "docs/unknown-private-file.txt"]
+                       "docs/LOCAL_VERIFICATION.md", "docs/unknown-private-file.txt",
+                       "docs/examples/unreviewed-private.png"]
             for name in files + private:
                 target = root / name
                 target.parent.mkdir(parents=True, exist_ok=True)
@@ -29,7 +32,8 @@ class PackagePrivacyTests(unittest.TestCase):
             with patch.object(packaging, "ROOT", root):
                 packaging.stage(destination)
             docs = destination / "usr/share/doc/mint-meter/docs"
-            self.assertEqual({p.name for p in docs.iterdir()}, set(public))
+            self.assertEqual({p.name for p in docs.iterdir()}, set(public) | {"examples"})
+            self.assertEqual({p.name for p in (docs / "examples").iterdir()}, set(examples))
             self.assertTrue((destination / "usr/share/doc/mint-meter/LICENSE").is_file())
             for path in destination.rglob("*"):
                 if path.is_file():

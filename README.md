@@ -7,6 +7,26 @@ on X11. Measurements and preferences stay on your computer.
 Mint Meter is an independent project, not an official Linux Mint product.
 Current version: **0.2.0**.
 
+[Download v0.2.0](https://github.com/saeedt20/mint-meter/releases/tag/v0.2.0)
+· [Installation](#install-a-debian-package) · [Build from source](#build-the-package)
+
+## Preview
+
+| Dark theme | Light theme |
+| --- | --- |
+| <img src="docs/examples/dark.png" alt="Dark theme with illustrative example data" width="320"> | <img src="docs/examples/light.png" alt="Light theme with illustrative example data" width="320"> |
+
+These captures use the **actual GTK interface with illustrative example data**.
+They do not contain a user's live measurements or desktop. The normal app always
+collects real readings; example data is used only by the documentation renderer.
+
+<details>
+<summary>View the settings dialog</summary>
+
+![Native settings with example configuration](docs/examples/settings.png)
+
+</details>
+
 ## Features
 
 - One 320 × 330 logical-pixel card: CPU, RAM, system disk, data usage and network.
@@ -58,8 +78,9 @@ the system GTK bindings. Run the widget as your normal user.
 
 ## Install a Debian package
 
-Build the package below, or download a `.deb` and its matching `SHA256SUMS`
-from GitHub Releases when a release is available. In the download directory:
+Download `mint-meter_0.2.0-1_all.deb` and `SHA256SUMS` from the
+[latest release](https://github.com/saeedt20/mint-meter/releases/latest), or
+build the package below. In the download directory:
 
 ```sh
 sha256sum -c SHA256SUMS

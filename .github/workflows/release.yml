@@ -29,4 +29,4 @@ jobs:
       - name: Publish release artifacts
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/*.deb dist/SHA256SUMS --verify-tag --generate-notes
+        run: gh release create "$GITHUB_REF_NAME" dist/*.deb dist/SHA256SUMS --verify-tag --title "Mint Meter $GITHUB_REF_NAME" --notes-file docs/RELEASE_NOTES.md

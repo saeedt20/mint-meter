@@ -49,6 +49,13 @@ def stage(destination):
     public_docs.mkdir(parents=True, exist_ok=True)
     for name in ("BUILD_SPEC.md", "DESIGN.md", "TESTING.md", "RELEASING.md"):
         shutil.copyfile(ROOT / "docs" / name, public_docs / name)
+    # These reviewed previews contain fixed example data, never live captures.
+    for name in ("dark.png", "light.png", "settings.png"):
+        source = ROOT / "docs/examples" / name
+        if source.is_file():
+            target = public_docs / "examples" / name
+            target.parent.mkdir(exist_ok=True)
+            shutil.copyfile(source, target)
     if (ROOT / "LICENSE").exists():
         shutil.copyfile(ROOT / "LICENSE", destination / "usr/share/doc/mint-meter/LICENSE")
     man = destination / "usr/share/man/man1/mint-meter.1.gz"
