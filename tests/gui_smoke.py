@@ -27,7 +27,9 @@ def run(*args):
 
 
 def windows(name):
-    result = subprocess.run(["xdotool", "search", "--name", f"^{name}$"], capture_output=True, text=True)
+    # GTK can also name its hidden group-leader window after the installed
+    # launcher. Only mapped windows are user-visible widget/settings instances.
+    result = subprocess.run(["xdotool", "search", "--onlyvisible", "--name", f"^{name}$"], capture_output=True, text=True)
     return result.stdout.split()
 
 
@@ -43,6 +45,19 @@ def await_window(name):
 def geometry(window):
     values = run("xdotool", "getwindowgeometry", "--shell", window)
     return dict(line.split("=", 1) for line in values.splitlines())
+
+
+def await_geometry(window, width, height):
+    # A window title can exist before GTK completes its first layout, especially
+    # when an extracted installation is running through syscall translation.
+    deadline = time.monotonic() + 15
+    while True:
+        current = geometry(window)
+        if (int(current["WIDTH"]), int(current["HEIGHT"])) == (width, height):
+            return current
+        if time.monotonic() >= deadline:
+            raise AssertionError(f"Expected {width}x{height} window, got {current}")
+        time.sleep(.1)
 
 
 def screenshot(window, path):
@@ -163,9 +178,8 @@ def main():
                     assert process.poll() is None, log.read_text()
                     active = run("xprop", "-root", "_NET_ACTIVE_WINDOW")
                     assert hex(int(window)) not in active, "Widget stole focus"
-                    g = geometry(window)
                     screen_scale = int(os.environ.get("GDK_SCALE", "1"))
-                    assert (int(g["WIDTH"]), int(g["HEIGHT"])) == (320*scale*screen_scale, 330*scale*screen_scale), g
+                    await_geometry(window, 320*scale*screen_scale, 330*scale*screen_scale)
                     composited = Gdk.Screen.get_default().is_composited()
                     assert composited == (os.environ.get("TALLYDESKLET_COMPOSITOR") == "on"), "Unexpected compositor state"
                     screenshot(window, output / f"{theme}-{scale}x.png")
