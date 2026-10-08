@@ -130,7 +130,7 @@ producing `dist/mint-meter_0.2.0-1_all.deb` and `dist/SHA256SUMS`. The determini
 staging installer is shared with conventional debhelper packaging:
 
 ```sh
-sudo apt install debhelper dh-python
+sudo apt install build-essential debhelper dh-python
 dpkg-buildpackage -us -uc -b
 ```
 

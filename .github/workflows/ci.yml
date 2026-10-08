@@ -10,7 +10,7 @@ jobs:
       - name: Install distribution dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-gi python3-gi-cairo python3-cairo python3-psutil gir1.2-gtk-3.0 iproute2 debhelper dh-python lintian xvfb xauth xfwm4 xdotool wmctrl x11-utils desktop-file-utils
+          sudo apt-get install -y python3-gi python3-gi-cairo python3-cairo python3-psutil gir1.2-gtk-3.0 iproute2 build-essential debhelper dh-python lintian xvfb xauth xfwm4 xdotool wmctrl x11-utils desktop-file-utils
       - name: Build and test
         run: |
           ./scripts/build-deb.sh
